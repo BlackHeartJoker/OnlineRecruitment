@@ -7,13 +7,13 @@ namespace OnlineRecruitment.DataAccessLayer.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AddingStackTable : IMigrationMetadata
+    public sealed partial class Changingname : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddingStackTable));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Changingname));
         
         string IMigrationMetadata.Id
         {
-            get { return "202007041706009_Adding Stack Table"; }
+            get { return "202007061543142_Changing name"; }
         }
         
         string IMigrationMetadata.Source

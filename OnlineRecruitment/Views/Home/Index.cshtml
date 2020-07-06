@@ -1,24 +1,315 @@
 ﻿<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>Online Recruitment System</h1>
+    <p class="lead">Free Online Platform for Hiring and Community from for Job Seekers and Employers.</p>
 </div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryunobtrusive") @*For unobtrusive-ajax*@
+    @Scripts.Render("~/bundles/jqueryval") @*For validate and validate-unobtrusive*@
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Register").hide();
+            $("#PersonTab").hide();
+            $("#EmployerTab").hide();
+            $("#Table").hide();
+            let token = localStorage.getItem("token");
+            if (token != null) {
+                $("#Login").empty()
+                $("#Register").empty()
+                $("#Table").show()
+            }
+
+            $('#Loginbtn').click(function () {
+                let userName = $('#txtUsername').val();
+                let password = $('#txtPassword').val();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Token",
+                    dataType: "json",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    data: {
+                        "grant_type": "password",
+                        "username": userName,
+                        "password": password
+                    },
+                    success: function (data) {
+                        alert("Hi " + data.userName);
+                        localStorage.setItem("token", data.access_token)
+                        $("#Login").empty()
+                        $("#Register").empty()
+                        $("#Table").show()
+                    },
+                    error: function (data) {
+                        $("#LoginResult").html("<h5>Wrong Username or password</h5>")
+                    }
+
+                })
+            })
+
+            $("#RegisterBtn").click(function () {
+                $("#Register").show();
+                $("#Login").hide();
+            })
+
+            $("#RegisterPersonBtn").click(function () {
+                $("#PersonTab").show();
+                $("#EmployerTab").hide();
+            })
+
+            $("#RegisterEmployerBtn").click(function () {
+                $("#PersonTab").hide();
+                $("#EmployerTab").show();
+            })
+
+            $("#RegisterPersonGo").click(function () {
+                let name = $("#personName").val();
+                let phone = $("#personPhone").val();
+                let password = $("#personPwd").val();
+                let email = $("#personEmail").val();
+                let age = $("#personAge").val();
+                let exp = $("#personExp").val();
+                let resume = $("#personResume").val();
+                let photo = $("#personPhoto").val();
+                let location = $("#personLocation").val();
+                let profession = $("#personProfession").val();
+                let gender = $("#personGen").val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/api/Account/RegisterJobSeeker",
+                    dataType: "json",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    data: {
+                        "PersonId": 0,
+                        "Name": name,
+                        "PhoneNo": phone,
+                        "Password": password,
+                        "Email": email,
+                        "Age": age,
+                        "Experience": exp,
+                        "Resume": resume,
+                        "Photo": photo,
+                        "Location": location,
+                        "Profession": profession,
+                        "Role": "JobSeeker",
+                        "Gender": gender
+                    },
+                    success: function (data) {
+                        alert("Registered Successfully")
+                        $("#RegisterMsg").html("Registered Successfully")
+                        $("#Register").empty()
+                        $("#Register").hide()
+                    },
+                    error: function (data) {
+                        $("#RegisterMsg").html(data)
+                    }
+
+                })
+            })
+
+            $("#RegisterEmployerGo").click(function () {
+
+                let name = $("#employerName").val();
+                let password = $("#employerPwd").val();
+                let email = $("#employerEmail").val();
+                let description = $("#employerDescription").val();
+                let date = $("#employerDate").val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/api/Account/RegisterEmployer",
+                    dataType: "json",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    data: {
+                        "EmployerName": name,
+                        "Password": password,
+                        "Email": email,
+                        "Description": description,
+                        "EstablishmentDate": date
+                    },
+                    success: function (data) {
+                        alert("Registered Successfully")
+                        $("#RegisterMsg").html("Registered Successfully")
+                        $("#Register").empty()
+                        $("#Register").hide()
+                    },
+                    error: function (data) {
+                        $("#RegisterMsg").html(data)
+                    }
+
+                })
+
+            })
+
+            $("#GetPersons").click(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: "https://localhost:44303/api/Person",
+                    dataType: "json",
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    },
+                    success: function (data) {
+                        let markup = '<ul>'
+                        for (var i = 0; i < data.length; i++) {
+                            markup += '<li>' + data[i].Name + '</li>'
+                        }
+                        markup += '</ul>'
+                        console.log(markup)
+
+                        $("#TableResults").html(markup);
+                    },
+                    error: function (data) {
+                        var markup = '<h5>'
+                        markup += data.responseJSON.Message + '</h5>'
+
+                        console.log(data.responseJSON.Message)
+                        $("#TableResults").html(markup);
+                    }
+                })
+            })
+
+            $("#GetEmployer").click(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: "https://localhost:44303/api/Employers",
+                    dataType: "json",
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    },
+                    success: function (data) {
+                        let markup = '<ul>'
+                        for (var i = 0; i < data.length; i++) {
+                            markup += '<li>' + data[i].EmployerName + '</li>'
+                        }
+                        markup += '</ul>'
+                        console.log(markup)
+
+                        $("#TableResults").html(markup);
+                    },
+                    error: function (data) {
+                        var markup = '<h5>'
+                        markup += data.responseJSON.Message +'</h5>'
+
+                        $("#TableResults").html(markup);
+                        console.log(data)
+
+                    }
+                })
+            })
+
+            //$("#Logout").click(function () {
+
+            //    $.ajax({
+            //        type: 'POST',
+            //        url: "https://localhost:44303/api/Account/Logout",
+            //        dataType: "json",
+            //        headers: {
+            //            "Authorization": "Bearer " + token
+            //        },
+            //        success: function (data) {
+            //            localStorage.removeItem("token")
+            //            location.reload()
+            //            window.location.reload();
+
+            //        },
+            //        error: function (data) {
+            //            localStorage.removeItem("token")
+            //            window.location.reload();
+            //        }
+
+            //    })
+            //})
+               
+        })
+    </script>
+}
+
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-        a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-        is an ideal platform for building RESTful applications on the .NET Framework.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
+    <div class="col-md-4"></div>
+    @* Login Person *@
+    <div class="col-md-4" id="Login" style="text-align:justify">
+        <h2>User Name </h2>
+        <h4><input type="text" id="txtUsername" style="text-align:center"></h4>
+        <h2>Password</h2>
+        <h4><input type="password" id="txtPassword" style="text-align:center"></h4>
+        <hr />
+        <div style="text-align:left">
+            <button id="Loginbtn">Login</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="ForgetPassword">Forgot Password</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="RegisterBtn">Register</button>
+        </div>
+        <div id="LoginResult"></div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
+    @* Register Person or Employer *@
+    <div class="col-md-4" id="Register">
+        <div style="text-align:left">
+            <button id="RegisterPersonBtn">Register as Person</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="RegisterEmployerBtn">Register as Employer</button>
+        </div>
+        <div id="PersonTab">
+            <h4>Name : </h4> <input id="personName" type="text" />
+            <h4>Phone Number : </h4> <input id="personPhone" type="text" />
+            <h4>Password: </h4> <input id="personPwd" type="text" />
+            <h4>Email: </h4> <input id="personEmail" type="text" />
+            <h4>Age: </h4> <input id="personAge" type="number" />
+            <h4>Experience: </h4> <input id="personExp" type="number" />
+            <h4>Resume: </h4> <input id="personResume" type="url" />
+            <h4>Photo: </h4> <input id="personPhoto" type="url" />
+            <h4>Location: </h4> <input id="personLocation" type="text" />
+            <h4>Profession: </h4> <input id="personProfession" type="text" />
+            <h4>Gender: </h4> <input id="personGen" type="radio" value="Male" />Male
+            <input id="personGen" type="radio" value="Female" /> Female
+            <br />
+            <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="RegisterPersonGo"> Register </button>
+        </div>
+
+        <div id="EmployerTab">
+            <h4>Name : </h4> <input id="employerName" type="text" />
+            <h4>Password: </h4> <input id="employerPwd" type="text" />
+            <h4>Email: </h4> <input id="employerEmail" type="text" />
+            <h4>Description: </h4> <input id="employerDescription" type="text" />
+            <h4>EstablishmentDate: </h4> <input id="employerDate" type="date" />
+            <br />
+            <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="RegisterEmployerGo"> Register </button>
+        </div>
+        <div id="RegisterMsg">
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
+
+
+    @* show Persons or employers *@
+    <div class="col-md-4" id="Table">
+        <div style="text-align:left">
+            <button id="GetPersons">Get Persons</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="GetEmployer">Get Employers</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @*<button id="Logout">Logout</button>*@
+        </div>
     </div>
+
+    <div class="col-md-4"></div>
+    <div id="TableResults"></div>
 </div>
+

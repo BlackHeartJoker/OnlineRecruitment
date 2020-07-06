@@ -76,33 +76,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBHelper.cs" />
-    <Compile Include="Migrations\202007041700586_Initial Migration.cs" />
-    <Compile Include="Migrations\202007041700586_Initial Migration.Designer.cs">
-      <DependentUpon>202007041700586_Initial Migration.cs</DependentUpon>
+    <Compile Include="Migrations\202007061457453_Initial Migration.cs" />
+    <Compile Include="Migrations\202007061457453_Initial Migration.Designer.cs">
+      <DependentUpon>202007061457453_Initial Migration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202007041703009_Adding Skills Table.cs" />
-    <Compile Include="Migrations\202007041703009_Adding Skills Table.Designer.cs">
-      <DependentUpon>202007041703009_Adding Skills Table.cs</DependentUpon>
+    <Compile Include="Migrations\202007061539150_Modifying the tables.cs" />
+    <Compile Include="Migrations\202007061539150_Modifying the tables.Designer.cs">
+      <DependentUpon>202007061539150_Modifying the tables.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202007041703444_Adding Projects Table.cs" />
-    <Compile Include="Migrations\202007041703444_Adding Projects Table.Designer.cs">
-      <DependentUpon>202007041703444_Adding Projects Table.cs</DependentUpon>
+    <Compile Include="Migrations\202007061543142_Changing name.cs" />
+    <Compile Include="Migrations\202007061543142_Changing name.Designer.cs">
+      <DependentUpon>202007061543142_Changing name.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202007041705340_Adding Education Table.cs" />
-    <Compile Include="Migrations\202007041705340_Adding Education Table.Designer.cs">
-      <DependentUpon>202007041705340_Adding Education Table.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202007041706009_Adding Stack Table.cs" />
-    <Compile Include="Migrations\202007041706009_Adding Stack Table.Designer.cs">
-      <DependentUpon>202007041706009_Adding Stack Table.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202007041708459_Adding Post Table.cs" />
-    <Compile Include="Migrations\202007041708459_Adding Post Table.Designer.cs">
-      <DependentUpon>202007041708459_Adding Post Table.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202007051942582_Adding Employer Tables.cs" />
-    <Compile Include="Migrations\202007051942582_Adding Employer Tables.Designer.cs">
-      <DependentUpon>202007051942582_Adding Employer Tables.cs</DependentUpon>
+    <Compile Include="Migrations\202007061549501_Removed Table name.cs" />
+    <Compile Include="Migrations\202007061549501_Removed Table name.Designer.cs">
+      <DependentUpon>202007061549501_Removed Table name.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -123,26 +111,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202007041700586_Initial Migration.resx">
-      <DependentUpon>202007041700586_Initial Migration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202007061457453_Initial Migration.resx">
+      <DependentUpon>202007061457453_Initial Migration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202007041703009_Adding Skills Table.resx">
-      <DependentUpon>202007041703009_Adding Skills Table.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202007061539150_Modifying the tables.resx">
+      <DependentUpon>202007061539150_Modifying the tables.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202007041703444_Adding Projects Table.resx">
-      <DependentUpon>202007041703444_Adding Projects Table.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202007061543142_Changing name.resx">
+      <DependentUpon>202007061543142_Changing name.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202007041705340_Adding Education Table.resx">
-      <DependentUpon>202007041705340_Adding Education Table.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202007041706009_Adding Stack Table.resx">
-      <DependentUpon>202007041706009_Adding Stack Table.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202007041708459_Adding Post Table.resx">
-      <DependentUpon>202007041708459_Adding Post Table.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202007051942582_Adding Employer Tables.resx">
-      <DependentUpon>202007051942582_Adding Employer Tables.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202007061549501_Removed Table name.resx">
+      <DependentUpon>202007061549501_Removed Table name.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

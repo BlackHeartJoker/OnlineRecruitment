@@ -7,16 +7,18 @@ namespace OnlineRecruitment.DataAccessLayer.Models
     {
         public int EmployerId { get; set; }
         public string EmployerName { get; set; }
+        public string Email { get; set; }
         public string Description { get; set; }
         public DateTime EstablishmentDate { get; set; }
-        public virtual ICollection<Employee> Employees { get; set; }
+        //public virtual ICollection<Employee> Employees { get; set; }
     }
 
     public class EmployerDTO
     {
         public string EmployerName { get; set; }
+        public string Email { get; set; }
         public string Description { get; set; }
         public DateTime EstablishmentDate { get; set; }
-        public List<Employee> Employees { get; set; }
+        public string Password { get; set; }
     }
 }

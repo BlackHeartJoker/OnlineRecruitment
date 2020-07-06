@@ -22,14 +22,14 @@ namespace OnlineRecruitment.DataAccessLayer
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public virtual DbSet<Skill> SkillsTable { get; set; }
-        public virtual DbSet<Project> ProjectTable { get; set; }
-        public virtual DbSet<Education> EducationTable { get; set; }
-        public virtual DbSet<Stack> StackTable { get; set; }
-        public virtual DbSet<Post> PostTable { get; set; }
+        //public virtual DbSet<Skill> SkillsTable { get; set; }
+        //public virtual DbSet<Project> ProjectTable { get; set; }
+        //public virtual DbSet<Education> EducationTable { get; set; }
+        //public virtual DbSet<Stack> StackTable { get; set; }
+        //public virtual DbSet<Post> PostTable { get; set; }
         public virtual DbSet<Person> PersonTable { get; set; }
         public virtual DbSet<Employer> EmployerTable { get; set; }
-        public virtual DbSet<Employee> EmployeeTable { get; set; }
+        //public virtual DbSet<Employee> EmployeeTable { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection")

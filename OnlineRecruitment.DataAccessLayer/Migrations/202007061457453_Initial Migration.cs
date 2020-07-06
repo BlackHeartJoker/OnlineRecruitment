@@ -8,6 +8,36 @@ namespace OnlineRecruitment.DataAccessLayer.Migrations
         public override void Up()
         {
             CreateTable(
+                "dbo.Employers",
+                c => new
+                    {
+                        EmployerId = c.Int(nullable: false, identity: true),
+                        EmployerName = c.String(),
+                        Description = c.String(),
+                        EstablishmentDate = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.EmployerId);
+            
+            CreateTable(
+                "dbo.People",
+                c => new
+                    {
+                        PersonId = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                        PhoneNo = c.Int(nullable: false),
+                        Email = c.String(),
+                        Age = c.Int(nullable: false),
+                        Experience = c.Int(nullable: false),
+                        Resume = c.String(),
+                        Photo = c.String(),
+                        Location = c.String(),
+                        Profession = c.String(),
+                        Role = c.String(),
+                        Gender = c.String(),
+                    })
+                .PrimaryKey(t => t.PersonId);
+            
+            CreateTable(
                 "dbo.AspNetRoles",
                 c => new
                     {
@@ -94,6 +124,8 @@ namespace OnlineRecruitment.DataAccessLayer.Migrations
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.People");
+            DropTable("dbo.Employers");
         }
     }
 }

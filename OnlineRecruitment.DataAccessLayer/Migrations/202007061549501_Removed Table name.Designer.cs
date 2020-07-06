@@ -7,13 +7,13 @@ namespace OnlineRecruitment.DataAccessLayer.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AddingEducationTable : IMigrationMetadata
+    public sealed partial class RemovedTablename : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddingEducationTable));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(RemovedTablename));
         
         string IMigrationMetadata.Id
         {
-            get { return "202007041705340_Adding Education Table"; }
+            get { return "202007061549501_Removed Table name"; }
         }
         
         string IMigrationMetadata.Source

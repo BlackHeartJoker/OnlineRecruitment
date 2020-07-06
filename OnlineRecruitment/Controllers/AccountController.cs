@@ -17,6 +17,7 @@ using OnlineRecruitment.DataAccessLayer.Models;
 using OnlineRecruitment.DataAccessLayer;
 using OnlineRecruitment.Providers;
 using OnlineRecruitment.Results;
+using OnlineRecruitment.BusinessLayer;
 
 namespace OnlineRecruitment.Controllers
 {
@@ -26,9 +27,11 @@ namespace OnlineRecruitment.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
+        private HelperClasses helper;
 
         public AccountController()
         {
+            helper = new HelperClasses();
         }
 
         public AccountController(ApplicationUserManager userManager,
@@ -36,6 +39,7 @@ namespace OnlineRecruitment.Controllers
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
+            helper = new HelperClasses();
         }
 
         public ApplicationUserManager UserManager
@@ -59,12 +63,14 @@ namespace OnlineRecruitment.Controllers
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
+            var role = User.IsInRole("JobSeeker") ? "JobSeeker" : "Employer";
+
             return new UserInfoViewModel
             {
                 Email = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null,
-                Role="Employer"
+                Role = role 
             };
         }
 
@@ -384,6 +390,55 @@ namespace OnlineRecruitment.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        [AllowAnonymous]
+        [Route("RegisterJobSeeker")]
+        public async Task<IHttpActionResult> RegisterJobSeeker(PersonDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+            var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
+            var roleManager = new RoleManager<IdentityRole>(roleStore);
+            roleManager.Create(new IdentityRole("JobSeeker"));
+            UserManager.AddToRole(user.Id, "JobSeeker");
+
+            var PersonId = helper.RegisterJobSeeker(model);
+            return Ok(PersonId);
+        }
+
+        [AllowAnonymous]
+        [Route("RegisterEmployer")]
+        public async Task<IHttpActionResult> RegisterEmployer(EmployerDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+            var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
+            var roleManager = new RoleManager<IdentityRole>(roleStore);
+            roleManager.Create(new IdentityRole("Employer"));
+            UserManager.AddToRole(user.Id, "Employer");
+            var employerId = helper.RegisterEmployer(model);
+            return Ok(employerId);
         }
 
         #region Helpers

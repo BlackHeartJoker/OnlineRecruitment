@@ -7,13 +7,13 @@ namespace OnlineRecruitment.DataAccessLayer.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class InitialMigration : IMigrationMetadata
+    public sealed partial class Modifyingthetables : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialMigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Modifyingthetables));
         
         string IMigrationMetadata.Id
         {
-            get { return "202007041700586_Initial Migration"; }
+            get { return "202007061539150_Modifying the tables"; }
         }
         
         string IMigrationMetadata.Source

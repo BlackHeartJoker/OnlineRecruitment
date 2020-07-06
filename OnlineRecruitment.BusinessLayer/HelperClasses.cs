@@ -17,58 +17,10 @@ namespace OnlineRecruitment.BusinessLayer
             database = new DBHelper();
         }
 
-        public bool RegisterJobSeeker(PersonDTO personDTO)
+        public int RegisterJobSeeker(PersonDTO personDTO)
         {
             try
             {
-                var skill = new Skill()
-                {
-                    Technology = personDTO.Stack.Skill.Technology
-                };
-                skill = database.CreateSkill(skill); //returns created skill object
-                var stack = new Stack()
-                {
-                    Competence = personDTO.Stack.Competence,
-                    Skill = skill
-                };
-                stack = database.CreateStack(stack); // returns stack object
-                var educations = new List<Education>();
-                foreach (var item in personDTO.Educations)
-                {
-                    var education = new Education()
-                    {
-                        EndYear = item.EndYear,
-                        InstituteName = item.InstituteName,
-                        StartYear = item.StartYear,
-                        StudyDuration = item.StudyDuration
-                    };
-                    education = database.CreateEducation(education); // returns educationObject
-                    educations.Add(education);
-                }
-
-                var projects = new List<Project>();
-                foreach (var item in personDTO.Projects)
-                {
-                    var projectSkills = new List<Skill>();
-                    foreach (var element in item.SkillsUsed)
-                    {
-                        var projectSkill = database.CreateSkill(element);
-                        projectSkills.Add(projectSkill);
-                    }
-                    var project = new Project()
-                    {
-                        Description = item.Description,
-                        Designation = item.Designation,
-                        Duration = item.Duration,
-                        ProjectName = item.ProjectName,
-                        Role = item.Role,
-                        SkillsUsed = projectSkills,
-                    };
-
-                    project = database.CreateProject(project); // returns project object
-                    projects.Add(project);
-                }
-
                 var person = new Person()
                 {
                     Age = personDTO.Age,
@@ -82,18 +34,14 @@ namespace OnlineRecruitment.BusinessLayer
                     Photo = personDTO.Photo,
                     Resume = personDTO.Resume,
                     Profession = personDTO.Profession,
-                    Stack = stack,
-                    Educations = educations,
-                    Projects = projects
                 };
 
-                database.CreatePerson(person); // Create person Entry to the database
-                return true;
+                return database.CreatePerson(person); // Create person Entry to the database
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                return false;
+                return 0;
             }
             
         }
@@ -107,7 +55,6 @@ namespace OnlineRecruitment.BusinessLayer
                     Description = employerDTO.Description,
                     EmployerName = employerDTO.EmployerName,
                     EstablishmentDate = employerDTO.EstablishmentDate,
-                    Employees = null
                 };
                 database.CreateEmployer(employer);
                 return true;
@@ -119,66 +66,78 @@ namespace OnlineRecruitment.BusinessLayer
             }
         }
 
-        public bool CreateEmployerPost(PostDTO postDTO)
+
+        public List<Person> GetAllPersons()
         {
-            try
-            {
-                var skills = new List<Skill>();
-
-                foreach(var item in postDTO.SkillsNeeded)
-                {
-                    Skill skill = null; 
-                    if (item.SkillId != 0)
-                    {
-                        skills.Add(item);
-                    }
-                    else
-                    {
-                        skill = database.IsSkillExists(item.Technology.ToLower().Trim());
-                        if(skill == null)
-                        {
-                            skill = database.CreateSkill(item);
-                            skills.Add(skill);
-                        }
-                    }
-                }
-
-
-                var post = new Post()
-                {
-                    EmployerDescription = postDTO.EmployerDescription,
-                    EmployerDuration = postDTO.EmployerDuration,
-                    EmployerName = postDTO.EmployerName,
-                    ExperienceLevel = postDTO.ExperienceLevel,
-                    isEnabled = postDTO.isEnabled,
-                    JobDescription = postDTO.JobDescription,
-                    Location = postDTO.Location,
-                    SkillsNeeded = skills
-                };
-                database.CreatePost(post);
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return false;
-            }
+            return database.GetPersonsList();
         }
 
-        public List<PostDTO> GetAllPosts()
+        public Person GetPersonById(int personId)
         {
-            database.GetActivePosts();
-            return null;
+            return database.GetPersonById(personId);
         }
 
-        public PersonDTO GetJobSeekerResume(int personId)
+        public void UpdatePerson(Person person)
         {
-            if (database.IsPersonExists(personId))
-            {
-                return database.GetPersonById(personId);
-            }
-            return null;
+            database.UpdatePerson(person);
         }
+
+        public Person DeletePerson(int id)
+        {
+            return database.DeletePerson(id);
+        }
+        //public bool CreateEmployerPost(PostDTO postDTO)
+        //{
+        //    try
+        //    {
+        //        var skills = new List<Skill>();
+
+        //        foreach(var item in postDTO.SkillsNeeded)
+        //        {
+        //            Skill skill = null; 
+        //            if (item.SkillId != 0)
+        //            {
+        //                skills.Add(item);
+        //            }
+        //            else
+        //            {
+        //                skill = database.IsSkillExists(item.Technology.ToLower().Trim());
+        //                if(skill == null)
+        //                {
+        //                    skill = database.CreateSkill(item);
+        //                    skills.Add(skill);
+        //                }
+        //            }
+        //        }
+
+
+        //        var post = new Post()
+        //        {
+        //            EmployerDescription = postDTO.EmployerDescription,
+        //            EmployerDuration = postDTO.EmployerDuration,
+        //            EmployerName = postDTO.EmployerName,
+        //            ExperienceLevel = postDTO.ExperienceLevel,
+        //            isEnabled = postDTO.isEnabled,
+        //            JobDescription = postDTO.JobDescription,
+        //            Location = postDTO.Location,
+        //            SkillsNeeded = skills
+        //        };
+        //        database.CreatePost(post);
+        //        return true;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        return false;
+        //    }
+        //}
+
+        //public List<PostDTO> GetAllPosts()
+        //{
+        //    database.GetActivePosts();
+        //    return null;
+        //}
+       
 
         public List<Person> GetJobSeekersList()
         {
@@ -201,7 +160,7 @@ namespace OnlineRecruitment.BusinessLayer
                         EmployerName = database.GetEmployerNameById(EmployerId),
                         PersonName = database.GetPersonNameById(JobSeekerId)
                     };
-                    database.CreateEmployee(employee);
+                    //database.CreateEmployee(employee);
                     database.UpdatePersonRole(JobSeekerId, "Employee");
                     
                     return true;
@@ -216,29 +175,29 @@ namespace OnlineRecruitment.BusinessLayer
             }
         }
 
-        public List<Employee> GetEmployees(int EmployerId)
-        {
-            if (database.IsEmployerExists(EmployerId))
-            {
-                return database.GetEmployeeList(EmployerId);
-            }
-            return null;
-        }
+        //public List<Employee> GetEmployees(int EmployerId)
+        //{
+        //    if (database.IsEmployerExists(EmployerId))
+        //    {
+        //        return database.GetEmployeeList(EmployerId);
+        //    }
+        //    return null;
+        //}
 
-        public bool FireEmployee(int EmployeeId)
-        {
-            if (database.IsEmployeeExists(EmployeeId))
-            {
-                var employee = database.GetEmployeeById(EmployeeId);
+        //public bool FireEmployee(int EmployeeId)
+        //{
+        //    if (database.IsEmployeeExists(EmployeeId))
+        //    {
+        //        var employee = database.GetEmployeeById(EmployeeId);
                 
-                if (database.UpdatePersonRole(employee.PersonId,"Job Seeker"))
-                {
-                    database.DeleteEmployee(EmployeeId);
-                }
-                return true;
-            }
-            return false;
-        }
+        //        if (database.UpdatePersonRole(employee.PersonId,"Job Seeker"))
+        //        {
+        //            database.DeleteEmployee(EmployeeId);
+        //        }
+        //        return true;
+        //    }
+        //    return false;
+        //}
         
     }
 }

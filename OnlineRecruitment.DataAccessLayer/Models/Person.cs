@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OnlineRecruitment.DataAccessLayer.Models
 {
+    [Table("Person")]
     public class Person
     {
         public int PersonId { get; set; }
@@ -17,9 +19,9 @@ namespace OnlineRecruitment.DataAccessLayer.Models
         public string Photo { get; set; }
         public string Location { get; set; }
         public string Profession { get; set; }
-        public virtual ICollection<Education> Educations { get; set; }
-        public virtual ICollection<Project> Projects { get; set; }
-        public virtual Stack Stack { get; set; }
+        //public virtual ICollection<Education> Educations { get; set; }
+        //public virtual ICollection<Project> Projects { get; set; }
+        //public virtual Stack Stack { get; set; }
         public string Role { get; set; }
         public string Gender { get; set; }
     }
@@ -36,11 +38,13 @@ namespace OnlineRecruitment.DataAccessLayer.Models
         public string Photo { get; set; }
         public string Location { get; set; }
         public string Profession { get; set; }
-        public List<Education> Educations { get; set; }
-        public List<ProjectDTO> Projects { get; set; }
-        public StackDTO Stack { get; set; }
+        //public List<Education> Educations { get; set; }
+        //public List<ProjectDTO> Projects { get; set; }
+        //public StackDTO Stack { get; set; }
         public string Role { get; set; }
         public string Gender { get; set; }
+        public string Password { get; set; }
+
     }
-    
+
 }
