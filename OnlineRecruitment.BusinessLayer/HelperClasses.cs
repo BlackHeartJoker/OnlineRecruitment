@@ -167,17 +167,22 @@ namespace OnlineRecruitment.BusinessLayer
 
         public List<PostDTO> GetAllPosts()
         {
-
+            database.GetActivePosts();
             return null;
         }
 
-        public Person GetJobSeekerResume(int personId)
+        public PersonDTO GetJobSeekerResume(int personId)
         {
+            if (database.IsPersonExists(personId))
+            {
+                return database.GetPersonById(personId);
+            }
             return null;
         }
 
         public List<Person> GetJobSeekersList()
         {
+            database.GetPersonsList();
             return null;
         }
 
@@ -197,6 +202,8 @@ namespace OnlineRecruitment.BusinessLayer
                         PersonName = database.GetPersonNameById(JobSeekerId)
                     };
                     database.CreateEmployee(employee);
+                    database.UpdatePersonRole(JobSeekerId, "Employee");
+                    
                     return true;
                 }
 
@@ -211,12 +218,27 @@ namespace OnlineRecruitment.BusinessLayer
 
         public List<Employee> GetEmployees(int EmployerId)
         {
+            if (database.IsEmployerExists(EmployerId))
+            {
+                return database.GetEmployeeList(EmployerId);
+            }
             return null;
         }
 
-        public bool FireEmployee(int EmployerId, int EmployeeId)
+        public bool FireEmployee(int EmployeeId)
         {
-            return true;
+            if (database.IsEmployeeExists(EmployeeId))
+            {
+                var employee = database.GetEmployeeById(EmployeeId);
+                
+                if (database.UpdatePersonRole(employee.PersonId,"Job Seeker"))
+                {
+                    database.DeleteEmployee(EmployeeId);
+                }
+                return true;
+            }
+            return false;
         }
+        
     }
 }

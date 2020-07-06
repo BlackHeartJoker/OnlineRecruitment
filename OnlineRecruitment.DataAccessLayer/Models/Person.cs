@@ -26,6 +26,7 @@ namespace OnlineRecruitment.DataAccessLayer.Models
 
     public class PersonDTO
     {
+        public int PersonId { get; set; }
         public string Name { get; set; }
         public int PhoneNo { get; set; }
         public string Email { get; set; }
@@ -41,4 +42,5 @@ namespace OnlineRecruitment.DataAccessLayer.Models
         public string Role { get; set; }
         public string Gender { get; set; }
     }
+    
 }

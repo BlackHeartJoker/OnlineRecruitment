@@ -130,6 +130,7 @@ namespace OnlineRecruitment.DataAccessLayer
 
             var PersonDTO = new PersonDTO()
             {
+                PersonId = person.PersonId,
                 Name = person.Name,
                 Stack = stack,
                 Projects = projects,
@@ -168,10 +169,11 @@ namespace OnlineRecruitment.DataAccessLayer
             return (from item in dbContext.PersonTable where item.PersonId == PersonId select item.Name).ToString();
         }
 
-        public void CreateEmployee(Employee employee)
+        public Employee CreateEmployee(Employee employee)
         {
             dbContext.EmployeeTable.Add(employee);
             dbContext.SaveChanges();
+            return employee;
         }
 
         public void CreatePost(Post post)
@@ -187,6 +189,79 @@ namespace OnlineRecruitment.DataAccessLayer
             return skill != null ? skill.FirstOrDefault() : null;
         }
 
-    }
+        public List<PostDTO> GetActivePosts()
+        {
+            var postsDTO = new List<PostDTO>();
+            var posts = dbContext.PostTable.Where(i => i.isEnabled).ToList();
+            foreach(var item in posts)
+            {
+                var tempPost = new PostDTO()
+                {
+                    EmployerDescription = item.EmployerDescription,
+                    isEnabled = item.isEnabled,
+                    EmployerDuration = item.EmployerDuration,
+                    EmployerName = item.EmployerName,
+                    ExperienceLevel = item.ExperienceLevel,
+                    JobDescription = item.JobDescription,
+                    Location = item.Location,
+                    PostId = item.PostId,
+                    SkillsNeeded = item.SkillsNeeded.ToList()
+                };
+                postsDTO.Add(tempPost);
+            }
+            return postsDTO;
+        }
 
+        public List<PersonDTO> GetPersonsList()
+        {
+            var personsList = new List<PersonDTO>();
+            foreach(var person in dbContext.PersonTable)
+            {
+                if(person.Role=="Job Seeker")
+                {
+                    personsList.Add(GetPersonById(person.PersonId));
+                }
+            }
+            return personsList;
+        }
+
+        public List<Employee> GetEmployeeList(int EmployerId)
+        {
+            return dbContext.EmployeeTable.Where(i => i.EmployerId == EmployerId).ToList();
+        }
+
+        public Employee GetEmployeeById(int EmployeeId)
+        {
+            return dbContext.EmployeeTable.Find(EmployeeId);
+        }
+
+        public bool IsEmployeeExists(int EmployeeId)
+        {
+            var temp = dbContext.EmployeeTable.Find(EmployeeId);
+            return temp != null ? true : false;
+        }
+
+        public bool UpdatePersonRole(int personId,string role)
+        {
+            try
+            {
+                var person = dbContext.PersonTable.Find(personId);
+                person.Role = role;
+                dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            }
+        }
+
+        public void DeleteEmployee(int employeeId)
+        {
+            var employee = dbContext.EmployeeTable.Find(employeeId);
+            dbContext.EmployeeTable.Remove(employee);
+            dbContext.SaveChanges();
+        }
+    }
 }
